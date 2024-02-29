@@ -1,10 +1,12 @@
 import mongoose, { Schema, model, models } from "mongoose";
+import { v4 } from "uuid"
 
 const UserSchema = new Schema({
-    id: {
+    _id: {
         type: String,
-        required: [true, "Id is required"],
+        required: true,
         unique: true,
+        default: v4()
     },
     email: {
         type: String,

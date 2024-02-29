@@ -5,6 +5,7 @@ import Link from "next/link";
 import { signIn, signOut, getProviders, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import ProfileMenu from "@components/ProfileMenu";
+import { useRouter } from "next/navigation";
 
 interface AuthProvider {
   id: string;
@@ -20,7 +21,12 @@ const Nav = () => {
     AuthProvider
   > | null>(null);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
-  const [profileMenu, setProfileMenu] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleSignout = () => {
+    signOut()
+    router.push("/");
+  }
 
   useEffect(() => {
     const callProviders = async () => {
@@ -32,7 +38,6 @@ const Nav = () => {
     callProviders();
   }, []);
 
-  console.log(session);
 
   return (
     <nav className="w-full flex-between mb-10 pt-3">
@@ -57,7 +62,7 @@ const Nav = () => {
 
             <button
               type="button"
-              onClick={() => signOut()}
+              onClick={() => handleSignout()}
               className="outline_btn"
             >
               Sign Out
@@ -131,7 +136,7 @@ const Nav = () => {
                   className="black_btn mt-10 w-full"
                   onClick={() => {
                     setProfileOpen(false);
-                    signOut();
+                    handleSignout()
                   }}
                 >
                   Sign Out

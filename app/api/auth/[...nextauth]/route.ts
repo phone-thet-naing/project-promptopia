@@ -1,6 +1,7 @@
 import NextAuth, { Session } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { connectToDB } from "@utils/database"
+import { v4 as uuidv4 } from 'uuid'
 import User from '@models/user'
 
 export interface UserSession extends Session {
@@ -38,6 +39,8 @@ const handler = NextAuth({
             try {
                 await connectToDB();
 
+                console.table({profile})
+
                 if (!profile) {
                     throw new Error('Profile data is missing!');
                 }
@@ -52,18 +55,20 @@ const handler = NextAuth({
                 if (!existingUser) {
                     // If the user does not exist, create a new one
                     const username = generateUniqueUsername(profile.name)
-                    await User.create({
+
+                    const newUser = await User.create({
                         email: profile.email,
                         username,
-                        image: profile.image
+                        image: profile.image,
                     })
-                    console.log('New user created!')
+                    
+                    console.log("new user: ", await newUser.json())
                 }
 
                 return true
             } catch (error: any) {
-                console.error('Error during sign-in: ', error?.message, '\n', error);
-                return false
+                console.log(error)
+                throw new Error(error)
             }
         },
 

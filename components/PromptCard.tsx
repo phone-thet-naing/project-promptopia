@@ -2,7 +2,7 @@
 import { Post } from "@app/create-prompt/page";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { UserInterface } from "@app/profile/page";
 import { usePathname } from "next/navigation";
 import { DefaultSession } from "next-auth";
@@ -17,6 +17,7 @@ interface Props {
 const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }: Props) => {
   const [copied, setCopied] = useState<string | undefined>("");
   const { data: session } = useSession();
+  const [user, setUser] = useState<UserInterface | null>(null);
   const pathName = usePathname();
 
   const handleCopy = () => {
@@ -24,6 +25,12 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }: Props) =
     navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000);
   }
+
+  useEffect(() => {
+    if (session && session.user) {
+      setUser(session.user)
+    }
+  }, []);
 
   return (
     <div className="prompt_card">
@@ -53,6 +60,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }: Props) =
           </p>
         </div>
 
+        {/* Copy Button */}
         {/* <div className="w-5 h-5 p3" onClick={() => handleCopy()}> */}
         <Image
           src={
@@ -69,21 +77,22 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }: Props) =
         {/* </div> */}
       </div>
 
-      <p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
+      {/* Prompt & Tag */}
+      <p className="my-4 font-satoshi text-sm text-gray-700 ">{post.prompt}</p>
       <p
-        className="font-inter text-xs blue_gradient cursor-pointer"
+        className="font-inter text-xs blue_gradient dark:text-blue-500 cursor-pointer"
         onClick={() => handleTagClick(post.tag)}
       >
         {post.tag}
       </p>
 
-      {session?.user?.id === post.creator?._id && pathName === "/profile" && (
+      {user?.id === post.creator?._id && pathName === "/profile" && (
         <div className="flex-end gap-4 mt-5  border border-gray-100 pt-3">
           <p className="font-inter text-sm green_gradient cursor-pointer" onClick={() => handleEdit(post)}>
             Edit
           </p>
 
-          <p className="font-inter text-sm orange_gradient cursor-pointer">
+          <p className="font-inter text-sm orange_gradient cursor-pointer" onClick={() => handleDelete(post)}>
             Delete
           </p>
         </div>

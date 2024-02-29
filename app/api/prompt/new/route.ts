@@ -15,7 +15,7 @@ export const POST = async (req: Request, res: Response) => {
 
         await newPrompt.save();
 
-        return new Response("Prompt creation successful!", { status: 201 });
+        return new Response("Prompt creation successful!", { status: 200 });
     } catch (error: any) {
         return new Response("Prompt creation failed!", { status: 500 });
     }
