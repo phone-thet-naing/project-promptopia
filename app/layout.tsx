@@ -3,13 +3,19 @@ import Nav from '@components/Nav'
 import Provider from '@components/Provider'
 import { Session } from 'next-auth'
 import { ThemeProvider } from 'next-themes'
+import { Children, ReactNode } from 'react'
 
 export const metadata = {
     title: "Promptopia",
     description: "Discover AI-generated prompts"
 }
 
-const RootLayout = ({ children, session } : { children: React.ReactNode, session: Session}) => {
+interface Props {
+    children: ReactNode
+    session: Session
+}
+
+const RootLayout = ({ children, session } : Props) => {
 
   return (
     <html>

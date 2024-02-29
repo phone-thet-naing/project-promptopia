@@ -1,13 +1,9 @@
 "use client";
 
 import { useState, FormEvent, useEffect } from "react";
-import Link from "next/link";
 import Form from "@components/Form";
 import { useSession } from "next-auth/react";
-import { UserSession } from "@app/api/auth/[...nextauth]/route";
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
-import { Router } from "next/router";
 
 import { UserInterface } from "@app/profile/page";
 
