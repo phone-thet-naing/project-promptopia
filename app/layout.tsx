@@ -9,7 +9,7 @@ export const metadata = {
     description: "Discover AI-generated prompts"
 }
 
-const RootLayout = ({ children, session }) => {
+const RootLayout = ({ children, session } : { children: React.ReactNode, session: Session}) => {
 
   return (
     <html>
